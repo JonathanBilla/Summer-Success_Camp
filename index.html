@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Summer Success Camp</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+</head>
+<body class="bg-gradient-to-r from-red-100 to-white min-h-screen p-4">
+
+  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+    <header class="bg-red-600 text-white text-center py-6 relative">
+      <div class="flex justify-between items-center px-4 absolute top-2 left-0 right-0">
+        <img src="https://via.placeholder.com/60x60?text=Logo1" alt="Logo 1" class="h-12 w-12 rounded-full border border-white" />
+        <img src="https://via.placeholder.com/60x60?text=Logo2" alt="Logo 2" class="h-12 w-12 rounded-full border border-white" />
+      </div>
+      <h1 class="text-3xl font-bold pt-10">Summer Success Camp</h1>
+      <p class="text-sm">Build skills. Beat boredom and screen time.</p>
+    </header>
+
+    <div class="p-6 space-y-4">
+      <p class="text-lg font-semibold">Holiday Learning Sheets</p>
+      <ul class="list-disc list-inside">
+        <li>Math and English for ages 4–14 years</li>
+        <li>Avoid the summer slide and keep learning this summer</li>
+        <li>Age appropriate worksheets</li>
+        <li>Daily practice</li>
+      </ul>
+
+      <button id="detailsBtn" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition">Show Details</button>
+      <div id="details" class="hidden mt-4 bg-gray-100 p-4 rounded-xl">
+        <p><strong>Dates:</strong></p>
+        <ul class="list-disc list-inside ml-4">
+          <li>30th June–4th July</li>
+          <li>7th July–11th July</li>
+          <li>14th July–18th July</li>
+          <li>21st July–25th July</li>
+        </ul>
+        <p class="mt-2"><strong>Daily Schedule:</strong></p>
+        <ul class="list-disc list-inside ml-4">
+          <li>10:00–10:30: Arrivals and show and tell</li>
+          <li>10:30–11:15: Maths worksheets and activities</li>
+          <li>11:15–11:45: Break and snacks</li>
+          <li>11:45–12:30: English worksheets and activities</li>
+          <li>12:30–13:00: Lunch and games</li>
+          <li>13:00: Disperse</li>
+        </ul>
+        <p class="mt-2"><strong>Fees:</strong> 1 Day: 250 AED | 5 Days: 1000 AED</p>
+        <p class="mt-2"><strong>Email:</strong> contact@skillscribe.me</p>
+        <p><strong>Mobile:</strong> 📞 +971585085699</p>
+        <p><strong>Website:</strong> <a href="https://www.firstclasslearning.ae" class="text-red-600 underline">www.firstclasslearning.ae</a></p>
+        <div class="flex gap-4 mt-4">
+          <a href="https://wa.me/971585085699" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">WhatsApp</a>
+          <a href="https://maps.google.com/?q=First+Class+Learning+UAE" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View on Map</a>
+        </div>
+      </div>
+
+      <form id="registrationForm" class="space-y-4">
+        <input type="text" id="name" placeholder="Your Name" class="w-full p-2 border rounded-lg" required />
+        <input type="email" id="email" placeholder="Your Email" class="w-full p-2 border rounded-lg" required />
+        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg">Submit</button>
+      </form>
+
+      <div id="apiResponse" class="text-green-700 font-semibold"></div>
+    </div>
+
+    <footer class="bg-gray-200 text-center text-sm py-4">
+      &copy; 2025 First Class Learning UAE. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const btn = document.getElementById('detailsBtn');
+    const details = document.getElementById('details');
+
+    btn.addEventListener('click', () => {
+      details.classList.toggle('hidden');
+      gsap.fromTo(details, { opacity: 0 }, { opacity: 1, duration: 0.5 });
+    });
+
+    const form = document.getElementById('registrationForm');
+    const responseBox = document.getElementById('apiResponse');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          responseBox.textContent = `Thank you, ${name}! Registration ID: ${data.id}`;
+          form.reset();
+        } else {
+          responseBox.textContent = 'Something went wrong. Please try again.';
+        }
+      } catch (error) {
+        responseBox.textContent = 'Error: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
